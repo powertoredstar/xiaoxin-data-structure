@@ -1,0 +1,1 @@
+"D:\Colin\CLion 2024.1.1\bin\cmake\win\x64\bin\cmake.exe" -DCMAKE_BUILD_TYPE=Debug "-DCMAKE_MAKE_PROGRAM=D:/Colin/CLion 2024.1.1/bin/ninja/win/x64/ninja.exe" -G Ninja -S D:\Cworkspace\数据结构与算法 -B D:\Cworkspace\数据结构与算法\cmake-build-debug
