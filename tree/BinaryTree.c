@@ -13,43 +13,117 @@ typedef struct TreeNode{
     struct TreeNode *right;
 } TreeNode;
 //定义树节点的栈结构
-typedef struct Stack_TreeNode{
-    TreeNode** frames;
+typedef struct TreeNode_Stack{
+    TreeNode** frames;//栈帧空间
     int top;//栈顶指针
     int init_size;//初始容量
     int increment_size;//扩容的增量
-    int max_size;//最大容量
-} Stack_TreeNode;
+    int max_size;//当前的最大容量
+} TreeNode_Stack;
+//定义树节点的队列结构
+typedef struct TreeNode_Queue{
+    TreeNode** data_items;//队列数据项集合
+    int front;//队头指针
+    int tail;//队尾指针
+    int queue_size;//队列当前容量
+    int init_size;//初始容量
+    int increment_size;//扩容的增量
+    int max_size;//当前的最大容量
+} TreeNode_Queue;
 //声明函数
 void printf_array(int* array,int array_size);
 int* generate_random_array(int lower_bound, int upper_bound,int array_size);
 TreeNode* create_node(int data);
 TreeNode* insert_node(TreeNode* root,TreeNode* newNode);
 void free_binary_tree_memory(TreeNode* root);
-bool is_binary_tree_empty(TreeNode* root);
+int is_binary_tree_empty(TreeNode* root);
 TreeNode* create_binary_tree(int* array,int array_length);
 TreeNode* merge_two_binary_tree(TreeNode* left_tree,TreeNode* right_tree);
 TreeNode* deleteNode(TreeNode* root,int value);
 void preOrder_traversal_recursion(TreeNode* root);
 void inOrder_traversal_recursion(TreeNode* root);
 void postOrder_traversal_recursion(TreeNode* root);
-void binary_tree_base_opertion_test_1();
-Stack_TreeNode* init_treeNode_stack(int init_size,int increment_size);
-int is_empty_treeNode_stack(Stack_TreeNode* stack);
-int is_full_treeNode_stack(Stack_TreeNode* stack);
-TreeNode* pop_treeNode_stack(Stack_TreeNode* stack);
-TreeNode* peep_treeNode_stack(Stack_TreeNode* stack);
-int push_treeNode_stack(Stack_TreeNode* stack,TreeNode* node);
+void binary_tree_base_operation_test_1();
+TreeNode_Stack* init_treeNode_stack(int init_size,int increment_size);
+int is_empty_treeNode_stack(TreeNode_Stack* stack);
+int is_full_treeNode_stack(TreeNode_Stack* stack);
+TreeNode* pop_treeNode_stack(TreeNode_Stack* stack);
+TreeNode* peep_treeNode_stack(TreeNode_Stack* stack);
+int push_treeNode_stack(TreeNode_Stack* stack,TreeNode* node);
 void preOrder_traversal(TreeNode* root);
 void inOrder_traversal(TreeNode* root);
 void postOrder_traversal(TreeNode* root);
-void destroy_treeNode_stack(Stack_TreeNode* stack);
+void destroy_treeNode_stack(TreeNode_Stack* stack);
+TreeNode_Queue* init_treeNode_queue(int init_size,int increment_size);
+void destroy_treeNode_queue(TreeNode_Queue* queue);
+int is_full_treeNode_queue(TreeNode_Queue* queue);
+int is_empty_treeNode_queue(TreeNode_Queue* queue);
+void enqueue_treeNode(TreeNode_Queue* queue,TreeNode* node);
+TreeNode* dequeue_treeNode(TreeNode_Queue* queue);
+TreeNode* peek_treeNode_queue(TreeNode_Queue* queue);
+void level_traversal(TreeNode* root);
+TreeNode* search_node(TreeNode* root,int value);
+TreeNode* search_max_node(TreeNode* root);
+TreeNode* search_min_node(TreeNode* root);
+int get_binary_tree_height(TreeNode* root,int count);
+int get_binary_tree_node_num(TreeNode* root);
+int get_binary_tree_depth(TreeNode* root,TreeNode* target);
+TreeNode* copy_binary_tree(TreeNode* root);
+void binary_tree_base_operation_test_2();
 
 int main(){
-    binary_tree_base_opertion_test_1();
+//    binary_tree_base_operation_test_1();
+    binary_tree_base_operation_test_2();
 
     return 0;
 }
+/**
+ *测试了以下函数：
+ TreeNode* search_node(TreeNode* root,int value);
+TreeNode* search_max_node(TreeNode* root);
+TreeNode* search_min_node(TreeNode* root);
+int get_binary_tree_height(TreeNode* root,int count);
+int get_binary_tree_node_num(TreeNode* root);
+int get_binary_tree_depth(TreeNode* root,TreeNode* target);
+TreeNode* copy_binary_tree(TreeNode* root);
+ */
+void binary_tree_base_operation_test_2() {
+    int array_size = 15;
+    int* array = generate_random_array(0,1000,array_size);
+    printf_array(array,array_size);
+
+    //将数组构造成一颗二叉树
+    TreeNode* root = create_binary_tree(array,array_size);
+
+    printf("search_node:array[array_size/2]\n");
+    TreeNode* search_node_data = search_node(root,array[array_size/2]);
+    printf("search_node_data:%d\n",search_node_data->data);
+
+    printf("search_max_node\n");
+    TreeNode* search_max_node_data = search_max_node(root);
+    printf("search_max_node:%d\n",search_max_node_data->data);
+
+    printf("search_min_node\n");
+    TreeNode* search_min_node_data = search_min_node(root);
+    printf("search_min_node:%d\n",search_min_node_data->data);
+
+    printf("get_binary_tree_height\n");
+    printf("height:%d\n",get_binary_tree_height(root,0));
+
+    printf("get_binary_tree_node_num\n");
+    printf("node_num:%d\n",get_binary_tree_node_num(root));
+
+    printf("get_binary_tree_depth\n");
+    printf("depth:%d\n",get_binary_tree_depth(root,search_node_data));
+
+    printf("copy_binary_tree\n");
+    TreeNode* new_root = copy_binary_tree(root);
+    printf("root:\n");
+    preOrder_traversal(root);
+    printf("copy_binary_tree:\n");
+    preOrder_traversal(new_root);
+}
+
 /**
  * 测试了
 void preOrder_traversal_recursion(TreeNode* root);
@@ -63,7 +137,7 @@ int* generate_random_array(int lower_bound, int upper_bound,int array_size);
  TreeNode* create_binary_tree(int* array,int array_length);
  TreeNode* merge_two_binary_tree(TreeNode* left_tree,TreeNode* right_tree);
  */
-void binary_tree_base_opertion_test_1() {//生成一个随机数组
+void binary_tree_base_operation_test_1() {//生成一个随机数组
     int array_size = 15;
     int* array = generate_random_array(0,1000,array_size);
     printf_array(array,array_size);
@@ -88,6 +162,10 @@ void binary_tree_base_opertion_test_1() {//生成一个随机数组
 
     printf("is_binary_tree_empty %d\n",is_binary_tree_empty(root));
 
+    //层序遍历
+    printf("level_traversal\n ");
+    level_traversal(root);
+    printf("\n");
     //删除节点
     root = deleteNode(root,array[array_size/2]);
 
@@ -290,8 +368,8 @@ TreeNode* deleteNode(TreeNode* root,int value){
  * 此函数通过动态内存分配创建一个栈，用于存储树节点指针
  * 它设置了栈的初始大小和增量大小，并将栈顶指针设置为-1，表示栈为空
  */
-Stack_TreeNode* init_treeNode_stack(int init_size,int increment_size){
-    Stack_TreeNode* stack = (Stack_TreeNode*)malloc(sizeof(Stack_TreeNode));
+TreeNode_Stack* init_treeNode_stack(int init_size,int increment_size){
+    TreeNode_Stack* stack = (TreeNode_Stack*)malloc(sizeof(TreeNode_Stack));
     // 为栈分配初始大小的内存空间
     stack->frames = (TreeNode**)malloc(sizeof(TreeNode*) * init_size);
     // 设置栈的初始大小
@@ -316,7 +394,7 @@ Stack_TreeNode* init_treeNode_stack(int init_size,int increment_size){
  * @param stack 指向栈的指针
  * @return 如果栈为空返回1，否则返回0
  */
-int is_empty_treeNode_stack(Stack_TreeNode* stack){
+int is_empty_treeNode_stack(TreeNode_Stack* stack){
     // 检查栈是否为空
     if(stack->top != -1){
         return 0;
@@ -339,7 +417,7 @@ int is_empty_treeNode_stack(Stack_TreeNode* stack){
  * 此函数通过比较栈的最大尺寸和当前栈顶的位置来判断栈是否已满。
  * 如果栈的最大尺寸等于栈顶位置加一，则表明栈已满，因为栈顶位置从0开始计数。
  */
-int is_full_treeNode_stack(Stack_TreeNode* stack){
+int is_full_treeNode_stack(TreeNode_Stack* stack){
     // 检查栈是否已满
     if(stack->max_size == (stack->top+1)){
         return 1; // 栈已满
@@ -357,7 +435,7 @@ int is_full_treeNode_stack(Stack_TreeNode* stack){
  * 表示没有树节点可以弹出如果栈不为空，函数将返回栈顶的树节点，并将栈顶指针减1，
  * 以实现弹出操作
  */
-TreeNode* pop_treeNode_stack(Stack_TreeNode* stack){
+TreeNode* pop_treeNode_stack(TreeNode_Stack* stack){
     //判断栈是否为空
     if(is_empty_treeNode_stack(stack)){
         return NULL;
@@ -375,7 +453,7 @@ TreeNode* pop_treeNode_stack(Stack_TreeNode* stack){
  *   - 如果栈为空，则返回NULL
  *   - 如果栈不为空，则返回栈顶的树节点
  */
-TreeNode* peep_treeNode_stack(Stack_TreeNode* stack){
+TreeNode* peep_treeNode_stack(TreeNode_Stack* stack){
     //判断栈是否为空
     if(is_empty_treeNode_stack(stack)){
         return NULL;
@@ -393,7 +471,7 @@ TreeNode* peep_treeNode_stack(Stack_TreeNode* stack){
  * @param node 要压入栈的节点指针
  * @return 成功压入栈时返回1，否则返回0
  */
-int push_treeNode_stack(Stack_TreeNode* stack,TreeNode* node){
+int push_treeNode_stack(TreeNode_Stack* stack,TreeNode* node){
     //判断栈是否已满
     if(is_full_treeNode_stack(stack)){
         //扩大栈空间
@@ -421,14 +499,17 @@ int push_treeNode_stack(Stack_TreeNode* stack,TreeNode* node){
  * 该函数首先释放树栈节点中的frames资源，然后释放栈树节点本身
  * 调用该函数后，传入的树栈节点指针不应再被使用，因为它所指向的内存已被释放
  */
-void destroy_treeNode_stack(Stack_TreeNode* stack){
+void destroy_treeNode_stack(TreeNode_Stack* stack){
     // 释放栈树节点中的frames资源
     free(stack->frames);
     // 释放栈树节点本身
     free(stack);
 }
 
-//前序遍历(递归实现)
+/**
+ * 前序遍历(递归实现)
+ * @param root
+ */
 void preOrder_traversal_recursion(TreeNode* root){
     if(root == NULL){
         return;
@@ -446,7 +527,7 @@ void preOrder_traversal_recursion(TreeNode* root){
  */
 void preOrder_traversal(TreeNode* root){
     //初始化栈
-    Stack_TreeNode* stack = init_treeNode_stack(10,10);
+    TreeNode_Stack* stack = init_treeNode_stack(10,10);
     //若根节点为空，则直接返回
     if(root == NULL){
         return;
@@ -484,10 +565,14 @@ void preOrder_traversal(TreeNode* root){
             printf("%d ",node->data);
         }
     }
+    printf("\n");
     destroy_treeNode_stack(stack);
 }
 
-//中序遍历(递归实现)
+/**
+ * 中序遍历(递归实现)
+ * @param root
+ */
 void inOrder_traversal_recursion(TreeNode* root){
     if(root == NULL){
         return;
@@ -506,7 +591,7 @@ void inOrder_traversal_recursion(TreeNode* root){
  */
 void inOrder_traversal(TreeNode* root){
     //初始化栈
-    Stack_TreeNode* stack = init_treeNode_stack(20,10);
+    TreeNode_Stack* stack = init_treeNode_stack(20,10);
     //若根节点为空，则直接返回
     if(root == NULL){
         return;
@@ -546,7 +631,10 @@ void inOrder_traversal(TreeNode* root){
     destroy_treeNode_stack(stack);
 }
 
-//后序遍历(递归实现)
+/**
+ * 后序遍历(递归实现)
+ * @param root
+ */
 void postOrder_traversal_recursion(TreeNode* root){
     if(root == NULL){
         return;
@@ -565,7 +653,7 @@ void postOrder_traversal_recursion(TreeNode* root){
  */
 void postOrder_traversal(TreeNode* root){
     //初始化栈
-    Stack_TreeNode* stack = init_treeNode_stack(10,10);
+    TreeNode_Stack* stack = init_treeNode_stack(10,10);
     //若根节点为空，则直接返回
     if(root == NULL){
         return;
@@ -608,49 +696,382 @@ void postOrder_traversal(TreeNode* root){
     destroy_treeNode_stack(stack);
 }
 
-//层序遍历
-void level_traversal(TreeNode* root){
+/**
+ * 初始化队列
+ * @param init_size 初始化队列的大小
+ * @param increment_size 队列满时增加的空间大小
+ * @return 返回初始化后的队列指针
+ */
+TreeNode_Queue* init_treeNode_queue(int init_size,int increment_size){
+    //给队列分配内存
+    TreeNode_Queue* queue = (TreeNode_Queue*) malloc(sizeof(TreeNode_Queue));
+    //给队列数据项空间分配内存
+    queue->data_items = (TreeNode**) malloc(sizeof(TreeNode*) * init_size);
+    //初始化队列的初始大小
+    queue->init_size = init_size;
+    //初始化队列的增量大小
+    queue->increment_size = increment_size;
+    //初始化队列的最大大小为初始大小
+    queue->max_size = init_size;
+    queue->front = 0;
+    queue->tail = 0;
+    //返回初始化后的队列指针
+    return queue;
+}
 
+/**
+ * 销毁树节点队列
+ *
+ * 本函数负责释放与树节点队列相关的所有内存资源，包括队列中数据项的内存和队列结构本身的内存
+ * 这是为了防止内存泄漏，确保在不需要队列时，所有由队列动态分配的内存都能被正确释放
+ *
+ * @param queue 指向树节点队列的指针如果队列为空（即NULL），则函数不执行任何操作
+ *
+ */
+void destroy_treeNode_queue(TreeNode_Queue* queue){
+    if(queue == NULL){
+        return;
+    }
+    // 释放队列中数据项的内存
+    free(queue->data_items);
+    // 释放队列结构本身的内存
+    free(queue);
 }
-//查找某个节点
+
+/**
+ * 检查TreeNode_Queue队列是否已满
+ *
+ * @param queue 指向TreeNode_Queue队列的指针
+ * @return 如果队列已满返回1，否则返回0
+ */
+int is_full_treeNode_queue(TreeNode_Queue* queue){
+    // 如果队列的当前大小大于等于最大容量，则队列已满
+    if(queue->queue_size >= queue->max_size){
+        return 1;
+    }
+    return 0;
+}
+
+/**
+ * 判断树节点队列是否为空
+ *
+ * 当队列的大小大于0时，表示队列不为空，返回0
+ * 如果队列的初始大小与最大大小不相等，重新分配队列的空间大小
+ * 当队列为空时，返回1
+ *
+ * @param queue 指向树节点队列的指针
+ * @return 如果队列为空，则返回1；否则返回0
+ */
+int is_empty_treeNode_queue(TreeNode_Queue* queue){
+    // 检查队列大小是否大于0
+    if(queue->queue_size > 0){
+        return 0;
+    }
+    // 检查队列是否已经进行了初始化
+    if(queue->init_size != queue->max_size){
+        // 重新分配队列空间大小
+        realloc(queue->data_items,queue->init_size* sizeof(TreeNode*));
+    }
+    // 队列为空，返回1
+    return 1;
+}
+
+/**
+ * 将节点添加到树节点队列中
+ *
+ * 当队列满时，此函数会首先检查队列是否已满如果已满，它会分配一个新的更大的数据项数组，
+ * 将现有数据项从当前数组复制到新数组中，然后将新数组设置为队列的数据项数组这个过程称为扩容
+ *
+ * @param queue 树节点队列的指针
+ * @param node 要入队的树节点的指针
+ */
+void enqueue_treeNode(TreeNode_Queue* queue,TreeNode* node){
+    //检查队列是否已满
+    if(is_full_treeNode_queue(queue)){
+        //队列已满，需要扩容
+        //分配新的更大的数据项数组
+        TreeNode** new_data_items = (TreeNode**) malloc(sizeof(TreeNode*) * (queue->max_size+queue->increment_size));
+        //复制现有数据项到新数组中
+        for(int i = 0;i < queue->max_size;i++){
+           new_data_items[i] = queue->data_items[(queue->front++)%queue->max_size];
+        }
+        //更新队列的尾部索引，前端索引和最大尺寸
+        queue->tail = queue->max_size;
+        queue->front= 0;
+        queue->max_size += queue->increment_size;
+        //将新数组设置为队列的数据项数组
+        queue->data_items = new_data_items;
+    }
+    //将节点添加到队列中
+    queue->data_items[queue->tail++] = node;
+    queue->tail %= queue->max_size;
+    queue->queue_size++;
+}
+
+/**
+ * 出队
+ * @param queue 队列指针
+ * @return 出队的树节点，如果队列为空则返回NULL
+ */
+TreeNode* dequeue_treeNode(TreeNode_Queue* queue){
+    // 检查队列是否为空，为空则返回NULL
+    if(is_empty_treeNode_queue(queue)){
+        return NULL;
+    }
+    // 获取并移动队首指针，取出队首元素
+    TreeNode* node =queue->data_items[queue->front++];
+    // 使用模运算确保队首指针在队列大小范围内循环
+    queue->front %= queue->max_size;
+    queue->queue_size--;
+    // 返回出队的节点
+    return node;
+}
+
+/**
+ * 获取队头元素但并不出队
+ * @param queue 队列指针
+ * @return 返回队头的TreeNode指针，如果队列为空则返回NULL
+ */
+TreeNode* peek_treeNode_queue(TreeNode_Queue* queue){
+    if(is_empty_treeNode_stack(queue)){
+        return NULL;
+    }
+    return queue->data_items[queue->front];
+}
+
+/**
+ * 层序遍历(广度优先遍历)
+ * @param root
+ */
+void level_traversal(TreeNode* root){
+    if(root == NULL){
+        return;
+    }
+    //初始化队列
+    TreeNode_Queue* queue = init_treeNode_queue(10,10);
+    //根节点入队
+    enqueue_treeNode(queue,root);
+    while(!is_empty_treeNode_queue(queue)){
+        int size = queue->queue_size;
+        for(int i = 0;i < size;i++){
+            TreeNode* node = dequeue_treeNode(queue);
+            if(node->left != NULL){
+                enqueue_treeNode(queue,node->left);
+            }
+            if(node->right != NULL){
+                enqueue_treeNode(queue,node->right);
+            }
+            printf("%d ",node->data);
+        }
+    }
+    destroy_treeNode_queue(queue);
+}
+
+/**
+ * 查找二叉树中某个节点
+ * @param root 二叉树的根节点指针
+ * @param value 需要查找的节点值
+ * @return 如果找到指定值的节点，则返回该节点的指针；否则返回NULL
+ */
 TreeNode* search_node(TreeNode* root,int value){
+    // 如果根节点为空，则直接返回NULL
+    if(root == NULL){
+        return NULL;
+    }
+    // 初始化一个队列用于层序遍历二叉树
+    TreeNode_Queue* queue = init_treeNode_queue(10,10);
+    // 将根节点入队
+    enqueue_treeNode(queue,root);
+    // 当队列不为空时，继续遍历
+    while(!is_empty_treeNode_queue(queue)){
+        // 获取当前队列中的节点数量
+        int size = queue->queue_size;
+        // 遍历当前队列中的所有节点
+        for(int i = 0;i < size;i++){
+            // 出队一个节点并检查其值是否为目标值
+            TreeNode* node = dequeue_treeNode(queue);
+            // 如果找到目标值，返回该节点的指针
+            if(node->data == value){
+                return node;
+            }
+            // 如果当前节点有左子节点，将左子节点入队
+            if(node->left != NULL){
+                enqueue_treeNode(queue,node->left);
+            }
+            // 如果当前节点有右子节点，将右子节点入队
+            if(node->right != NULL){
+                enqueue_treeNode(queue,node->right);
+            }
+        }
+    }
+    // 如果遍历完整个二叉树后仍未找到目标值，则返回NULL
     return NULL;
 }
-//查找二叉树中的最大值
+
+/**
+ * 查找二叉树中的最大值
+ * @param root 二叉树的根节点指针
+ * @return 返回指向树中最大值节点的指针，如果树为空则返回NULL
+ */
 TreeNode* search_max_node(TreeNode* root){
-    return NULL;
+    // 如果根节点为空，说明树为空，直接返回NULL
+    if(root == NULL){
+        return NULL;
+    }
+    // 递归查找左子树中的最大值节点
+    TreeNode*  left = search_max_node(root->left);
+    // 递归查找右子树中的最大值节点
+    TreeNode* right = search_max_node(root->right);
+    // 初始化最大值节点为当前根节点
+    TreeNode* max_node = root;
+    // 如果左子树的最大值节点存在且大于当前最大值节点，则更新最大值节点
+    if(left != NULL && max_node->data < left->data){
+        max_node = left;
+    }
+    // 如果右子树的最大值节点存在且大于当前最大值节点，则更新最大值节点
+    if(right != NULL && max_node->data < right->data){
+        max_node = right;
+    }
+    // 返回树中的最大值节点
+    return max_node;
 }
-//查找二叉树中的最小值
+
+/**
+ * 查找二叉树中的最小值
+ * @param root
+ * @return
+ */
 TreeNode* search_min_node(TreeNode* root){
-    return NULL;
+    // 如果根节点为空，说明树为空，直接返回NULL
+    if(root == NULL){
+        return NULL;
+    }
+    // 递归查找左子树中的最小值节点
+    TreeNode*  left = search_min_node(root->left);
+    // 递归查找右子树中的最小值节点
+    TreeNode* right = search_min_node(root->right);
+    // 初始化最小值节点为当前根节点
+    TreeNode* min_node = root;
+    // 如果左子树的最小值节点存在且小于当前最小值节点，则更新最小值节点
+    if(left != NULL && min_node->data > left->data){
+        min_node = left;
+    }
+    // 如果右子树的最小值节点存在且小于当前最小值节点，则更新最小值节点
+    if(right != NULL && min_node->data > right->data){
+        min_node = right;
+    }
+    // 返回树中的最小值节点
+    return min_node;
 }
-//获取二叉树的高度
-int  get_binary_tree_height(TreeNode* root){
-    return 0;
+
+/**
+ * 计算二叉树的高度
+ *
+ * @param root 二叉树的根节点指针
+ * @param count 当前遍历的层数
+ * @return 返回二叉树的高度
+ *
+ * 该函数通过递归方式计算二叉树的高度定义如下：
+ * 1. 如果根节点为空，则返回当前的层数作为高度
+ * 2. 否则，递归计算左子树和右子树的高度，然后取其中较大值作为当前二叉树的高度
+ */
+int get_binary_tree_height(TreeNode* root,int count){
+    // 判断当前节点是否为空，如果为空则返回当前层数
+    if(root == NULL){
+        return count;
+    }
+    // 当前层数加一，表示进入下一层
+    count++;
+    // 递归计算左子树的高度
+    int left = get_binary_tree_height(root->left,count);
+    // 递归计算右子树的高度
+    int right = get_binary_tree_height(root->right,count);
+    // 比较左子树和右子树的高度，返回较大值
+    return left > right ? left : right;
 }
-//计算目标节点的深度
+
+/**
+ * 计算目标节点的深度
+ * @param root 二叉树的根节点
+ * @param target 需要寻找的目标节点
+ * @return 如果目标节点存在于树中，则返回目标节点的深度；否则返回0
+ */
 int get_binary_tree_depth(TreeNode* root,TreeNode* target){
+    // 检查输入的根节点或目标节点是否为空，如果为空，则返回0
+    if(root == NULL || target == NULL){
+        return 0;
+    }
+
+    // 递归计算左子树中目标节点的深度
+    int left = get_binary_tree_depth(root->left,target);
+    // 递归计算右子树中目标节点的深度
+    int right = get_binary_tree_depth(root->right,target);
+
+    // 根据左右子树的深度，选择非零的深度作为当前节点的深度
+    int depth = left == 0 ? right:left;
+
+    // 如果当前节点是目标节点，或者当前节点的子树中包含目标节点，则返回当前深度加1
+    if(root == target || depth != 0){
+        return depth + 1;
+    }
+
+    // 如果当前节点及其子树中都不包含目标节点，则返回0
     return 0;
 }
-//计算节点数
+
+/**
+ * 计算二叉树节点数
+ * @param root 二叉树的根节点指针
+ * @return 二叉树的节点总数
+ */
 int get_binary_tree_node_num(TreeNode* root){
-    return 0;
+    // 如果节点为空，则返回0，表示该子树不存在节点
+    if(root == NULL){
+        return 0;
+    }
+
+    // 递归计算左子树的节点数
+    int left = get_binary_tree_node_num(root->left);
+    // 递归计算右子树的节点数
+    int right = get_binary_tree_node_num(root->right);
+
+    // 返回左子树节点数、右子树节点数和根节点的总和
+    return left + right + 1;
 }
+
 /**
  * 判断二叉树是否为空
  * @param root
  * @return
  */
-bool is_binary_tree_empty(TreeNode* root){
+int is_binary_tree_empty(TreeNode* root){
     if(root == NULL){
         return true;
     }
     return false;
 }
-//复制二叉树
+
+/**
+ * 复制二叉树
+ * @param root 原始二叉树的根节点
+ * @return 新建二叉树的根节点指针
+ *
+ * 该函数通过递归方式复制一个二叉树。对于给定的原始二叉树，它会创建一个新节点，
+ * 然后递归地复制原始二叉树的左子树和右子树到新节点的左子树和右子树。
+ */
 TreeNode* copy_binary_tree(TreeNode* root){
-    return NULL;
+    if(root == NULL){
+        return NULL;
+    }
+    TreeNode* new_node = create_node(root->data);
+    // 递归复制左子树
+    new_node->left =copy_binary_tree(root->left);
+    // 递归复制右子树
+    new_node->right = copy_binary_tree(root->right);
+    // 返回新节点作为当前子树的根节点
+    return new_node;
 }
+
 /**
  * 释放二叉树内存(后序遍历)
  * @param root
@@ -670,13 +1091,38 @@ void free_binary_tree_memory(TreeNode* root){
 TreeNode* convert_binary_tree_to_balanced_binary_tree(TreeNode* root){
     return NULL;
 }
-//左旋二叉树
+
+
+/**
+ * 左旋二叉树
+ * @param root 二叉树的根节点指针
+ * @return 旋转后的根节点指针
+ */
 TreeNode* left_rotate_binary_tree(TreeNode* root){
-    return NULL;
+    //记录新的根节点
+    TreeNode* right_child = root->right;
+    //原根节点的右子树变为新根节点的左子树
+    root->right = right_child->left;
+    //原根节点变为新根节点的左子树的根节点
+    right_child->left = root;
+    //返回新的根节点
+    return right_child;
 }
-//右旋二叉树
+
+/**
+ * 右旋二叉树
+ * @param root
+ * @return
+ */
 TreeNode* right_rotate_binary_tree(TreeNode* root){
-    return NULL;
+    //记录新的根节点
+    TreeNode* left_child = root->left;
+    //原根节点的左子树变成新根节点的右子树
+    root->left = left_child->right;
+    //原根节点变为新根节点的右子树的根节点
+    left_child->right = root;
+    //返回新的根节点
+    return left_child;
 }
 //路径查找
 
