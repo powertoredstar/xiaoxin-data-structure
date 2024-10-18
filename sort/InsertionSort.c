@@ -28,8 +28,9 @@ int main(){
 
 
     //对数组进行排序
-//    insertion_sort(array,array_size);
-    insertion_sort_descending(array,array_size);
+    insertion_sort(array,array_size);
+//    insertion_sort_descending(array,array_size);
+
 
     //打印排序后的数组
     printf("after sort\n");
@@ -62,7 +63,7 @@ void insertion_sort(int arr[],int size){
         int already_sorted = i - 1;
         int target = arr[i];
         //从后向前扫描，找到可以插入的位置(第一个小于当前元素的元素)
-        while(already_sorted > 0 && arr[already_sorted] > target){
+        while(already_sorted >= 0 && arr[already_sorted] > target){
             arr[already_sorted+1] = arr[already_sorted];
             already_sorted--;
         }
