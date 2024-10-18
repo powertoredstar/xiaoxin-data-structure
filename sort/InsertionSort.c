@@ -11,6 +11,7 @@ void generate_random_array(int arr[],int size);
 void printf_array(const int arr[],int size);
 void insertion_sort(int arr[],int size);
 void insertion_sort_descending(int arr[],int size);
+void printf_array_index(const int arr[],int size);
 
 int main(){
     //定义数组大小
@@ -28,8 +29,8 @@ int main(){
 
 
     //对数组进行排序
-    insertion_sort(array,array_size);
-//    insertion_sort_descending(array,array_size);
+//    insertion_sort(array,array_size);
+    insertion_sort_descending(array,array_size);
 
 
     //打印排序后的数组
@@ -53,6 +54,7 @@ void insertion_sort_descending(int arr[],int size){
             already_sorted--;
         }
         arr[already_sorted+1] = target;
+//        printf_array_index(arr,size);
     }
 }
 //插入排序
@@ -82,6 +84,13 @@ void generate_random_array(int arr[],int size){
 void printf_array(const int arr[],int size){
     for(int i = 0;i < size;i++){
         printf("%d ",arr[i]);
+    }
+    printf("\n");
+}
+//打印数组内容+索引
+void printf_array_index(const int arr[],int size){
+    for(int i = 0;i < size;i++){
+        printf("(%d:%d) ",i,arr[i]);
     }
     printf("\n");
 }

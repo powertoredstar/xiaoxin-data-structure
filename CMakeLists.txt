@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.28)
-project(C)
+project(tree/BinaryTree.c)
 
 set(CMAKE_C_STANDARD 11)
 
@@ -62,9 +62,11 @@ add_executable(main.c
         graph/MatrixList.c
         sort/BubbleSort.c
         sort/HeapSort.c
-        sort/HeapSort.c)
+        sort/HeapSort.c
+        tree/BinaryTree.c
+)
 
-add_executable(main main.c
+add_executable(main
         sort/BubbleSort.c
         sort/BubbleSort.c
         sort/BubbleSort.c
@@ -124,4 +126,6 @@ add_executable(main main.c
         graph/MatrixList.c
         sort/BubbleSort.c
         sort/HeapSort.c
-        sort/HeapSort.c)
+        sort/HeapSort.c
+        tree/BinaryTree.c
+)
