@@ -3,7 +3,7 @@ project(tree/BinaryTree.c)
 
 set(CMAKE_C_STANDARD 11)
 
-add_executable(main.c
+add_executable(
         sort/BubbleSort.c
         sort/BubbleSort.c
         sort/SelectionSort.c
@@ -66,7 +66,7 @@ add_executable(main.c
         tree/BinaryTree.c
 )
 
-add_executable(main
+add_executable(
         sort/BubbleSort.c
         sort/BubbleSort.c
         sort/BubbleSort.c
